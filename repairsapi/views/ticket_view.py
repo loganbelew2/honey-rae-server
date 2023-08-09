@@ -9,6 +9,22 @@ from repairsapi.models import ServiceTicket, Employee, Customer
 class TicketView(ViewSet):
     """Honey Rae API tickets view"""
 
+    def destroy(self, request, pk=None):
+        ticket = ServiceTicket.objects.get(pk=pk)
+
+        ticket.delete()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    def update(self, request, pk= None):
+        ticket = ServiceTicket.objects.get(pk=pk)
+        employee_id = request.data['employee']
+        assigned_employee = Employee.objects.get(pk = employee_id)
+        ticket.employee = assigned_employee
+        ticket.save()
+        return Response(None, status = status.HTTP_204_NO_CONTENT)
+    
+
     def list(self, request):
         """Handle GET requests to get all tickets
 
